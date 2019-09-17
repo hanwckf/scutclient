@@ -173,6 +173,9 @@ int main(int argc, char *argv[]) {
 				break;
 			}
 		} else {
+			if (OfflineHookCmd) {
+				system(OfflineHookCmd);
+			}
 			break;
 		}
 	}
