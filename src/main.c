@@ -24,6 +24,7 @@ static const struct option long_options[] = {
 	{"offline-hook", required_argument, NULL, 'Q'},
 	{"debug", optional_argument, NULL, 'D'},
 	{"logoff", no_argument, NULL, 'o'},
+	{"version", no_argument, NULL, 'V'},
 	{NULL, no_argument, NULL, 0}
 };
 
@@ -39,6 +40,7 @@ void PrintHelp(const char * argn) {
 		" -E, --online-hook <command> Command to be execute after EAP authentication success.\n"
 		" -Q, --offline-hook <command> Command to be execute when you are forced offline at nignt.\n"
 		" -D, --debug\n"
+		" -V, --version\n"
 		" -o, --logoff\n",
 		argn);
 }
@@ -50,11 +52,6 @@ void handle_term(int signal) {
 }
 
 int main(int argc, char *argv[]) {
-	LogWrite(ALL, INF, "scutclient built at: " __DATE__ " " __TIME__);
-	LogWrite(ALL, INF, "Authored by Scutclient Project");
-	LogWrite(ALL, INF, "Source code available at https://github.com/scutclient/scutclient");
-	LogWrite(ALL, INF, "Contact us with QQ group 262939451");
-	LogWrite(ALL, INF, "#######################################");
 	int client = 1;
 	int ch, tmpdbg;
 	uint8_t a_hour = 255, a_minute = 255;
@@ -62,7 +59,7 @@ int main(int argc, char *argv[]) {
 	time_t ctime;
 	struct tm * cltime;
 
-	while ((ch = getopt_long(argc, argv, "u:p:i:n:H:s:c:T:h:E:Q:D::o",
+	while ((ch = getopt_long(argc, argv, "u:p:i:n:H:s:c:T:h:E:Q:D::oV",
 			long_options, NULL)) != -1) {
 		switch (ch) {
 		case 'u':
@@ -122,12 +119,21 @@ int main(int argc, char *argv[]) {
 		case 'o':
 			client = LOGOFF;
 			break;
+		case 'V':
+			printf("%s\n", SCUTCLIENT_VERSION);
+			exit(0);
 		default:
 			PrintHelp(argv[0]);
 			exit(-1);
 			break;
 		}
 	}
+
+	LogWrite(ALL, INF, "scutclient built at: " __DATE__ " " __TIME__);
+	LogWrite(ALL, INF, "Authored by Scutclient Project");
+	LogWrite(ALL, INF, "Source code available at https://github.com/scutclient/scutclient");
+	LogWrite(ALL, INF, "Contact us with QQ group 262939451");
+	LogWrite(ALL, INF, "#######################################");
 
 	if (HostName[0] == 0)
 		gethostname(HostName, sizeof(HostName));

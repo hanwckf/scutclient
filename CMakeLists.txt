@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.4)
 project(scutclient C)
+set(PROJECT_VERSION "3.1.2")
 ADD_DEFINITIONS(-Os -Wall)
 add_executable(scutclient src/auth.c src/drcom.c src/functions.c src/info.c src/main.c src/md5.c src/tracelog.c)
+target_compile_definitions(${PROJECT_NAME} PRIVATE SCUTCLIENT_VERSION="${PROJECT_VERSION}")
 install(TARGETS scutclient RUNTIME DESTINATION bin)
