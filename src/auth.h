@@ -46,4 +46,4 @@ int Drcom_UDP_Handler(uint8_t *recv_data);
 void initAuthenticationInfo();
 void loginToGetServerMAC(uint8_t recv_data[]);
 void printIfInfo();
-
+void exit_with_hook(int a);

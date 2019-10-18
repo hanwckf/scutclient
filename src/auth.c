@@ -379,7 +379,7 @@ void loginToGetServerMAC(uint8_t recv_data[]) {
 					// 初始化服务器MAC地址
 					memcpy(EthHeader, recv_data + 6, 6);
 					if(auth_8021x_Handler(recv_data))
-						exit(EXIT_FAILURE); //这里不需要考虑重拨的问题，正常第一个请求是Identity，不会失败。
+						exit_with_hook(EXIT_FAILURE); //这里不需要考虑重拨的问题，正常第一个请求是Identity，不会失败。
 					return;
 				} else {
 					continue;
@@ -391,7 +391,7 @@ void loginToGetServerMAC(uint8_t recv_data[]) {
 			LogWrite(DOT1X, ERROR, "Error! No Response");
 			// 确保下线
 			auth_8021x_Logoff();
-			exit(EXIT_FAILURE);
+			exit_with_hook(EXIT_FAILURE);
 		}
 
 		times--;
@@ -644,7 +644,7 @@ int auth_8021x_Handler(uint8_t recv_data[]) {
 			return 1;
 		} else {
 			LogWrite(DOT1X, ERROR, "Reconnection failed. Server: errtype=0x%02hhx", errtype);
-			exit(EXIT_FAILURE);
+			exit_with_hook(EXIT_FAILURE);
 		}
 	} else if ((EAP_Code) recv_data[18] == SUCCESS) {
 		LogWrite(DOT1X, INF, "Server: Success.");
@@ -668,4 +668,10 @@ int auth_8021x_Handler(uint8_t recv_data[]) {
 		auth_8021x_Sender(send_8021x_data, send_8021x_data_len);
 	}
 	return 0;
+}
+
+void exit_with_hook(int a) {
+	if (OfflineHookCmd)
+		system(OfflineHookCmd);
+	exit(a);
 }
