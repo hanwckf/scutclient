@@ -26,6 +26,7 @@ extern char HostName[32];
 extern char *Hash;
 extern unsigned char Version[64];
 extern int Version_len;
+extern int skip_udp_hb;
 
 int hexStrToByte(const char* source, unsigned char* dest, int bufLen);
 #endif

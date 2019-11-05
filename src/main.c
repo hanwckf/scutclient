@@ -17,6 +17,7 @@ static const struct option long_options[] = {
 	{"dns", required_argument, NULL, 'n'},
 	{"hostname", required_argument, NULL, 'H'},
 	{"udp-server", required_argument, NULL, 's'},
+	{"skip-hb", no_argument, NULL, 'b'},
 	{"cli-version", required_argument,NULL, 'c'},
 	{"net-time", required_argument,NULL, 'T'},
 	{"hash", required_argument, NULL, 'h'},
@@ -34,6 +35,7 @@ void PrintHelp(const char * argn) {
 		" -n, --dns <dns> DNS server address to be sent to UDP server.\n"
 		" -H, --hostname <hostname>\n"
 		" -s, --udp-server <server>\n"
+		" -b, --skip-hb Skip UDP heartbeat \n"
 		" -c, --cli-version <client version>\n"
 		" -T, --net-time <time> The time you are allowed to access internet. e.g. 6:10\n"
 		" -h, --hash <hash> DrAuthSvr.dll hash value.\n"
@@ -59,7 +61,7 @@ int main(int argc, char *argv[]) {
 	time_t ctime;
 	struct tm * cltime;
 
-	while ((ch = getopt_long(argc, argv, "u:p:i:n:H:s:c:T:h:E:Q:D::oV",
+	while ((ch = getopt_long(argc, argv, "u:p:i:n:H:s:c:T:h:E:Q:D::oVb",
 			long_options, NULL)) != -1) {
 		switch (ch) {
 		case 'u':
@@ -91,6 +93,9 @@ int main(int argc, char *argv[]) {
 				LogWrite(INIT, ERROR, "UDP server IP invalid!");
 				exit(-1);
 			}
+			break;
+		case 'b':
+			skip_udp_hb = 1;
 			break;
 		case 'T':
 			if((sscanf(optarg, "%hhu:%hhu", &a_hour, &a_minute) != 2) || (a_hour >= 24) || (a_minute >= 60)) {

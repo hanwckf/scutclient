@@ -12,6 +12,7 @@ char HostName[32];
 char *Hash = "2ec15ad258aee9604b18f2f8114da38db16efd00";
 unsigned char Version[64] = { 0x44, 0x72, 0x43, 0x4f, 0x4d, 0x00, 0x96, 0x02, 0x2a };
 int Version_len = 9;
+int skip_udp_hb = 0;
 
 int hexStrToByte(const char* source, unsigned char* dest, int bufLen) {
 	int i;
